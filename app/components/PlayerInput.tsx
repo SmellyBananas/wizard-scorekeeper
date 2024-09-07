@@ -1,4 +1,4 @@
-import { useState, KeyboardEvent } from "react";
+import { useState, useEffect, KeyboardEvent } from "react";
 
 interface PlayerInputProps {
   onStart: (players: string[]) => void;
@@ -6,6 +6,13 @@ interface PlayerInputProps {
 
 export default function PlayerInput({ onStart }: PlayerInputProps) {
   const [players, setPlayers] = useState<string[]>(["", "", ""]);
+
+  useEffect(() => {
+    const savedPlayers = localStorage.getItem('wizardPlayers');
+    if (savedPlayers) {
+      setPlayers(JSON.parse(savedPlayers));
+    }
+  }, []);
 
   const addPlayer = () => {
     if (players.length < 6) {
@@ -22,6 +29,7 @@ export default function PlayerInput({ onStart }: PlayerInputProps) {
   const startGame = () => {
     const validPlayers = players.filter((name) => name.trim() !== "");
     if (validPlayers.length >= 3 && validPlayers.length <= 6) {
+      localStorage.setItem('wizardPlayers', JSON.stringify(validPlayers));
       onStart(validPlayers);
     } else {
       alert("Please enter 3 to 6 player names.");
