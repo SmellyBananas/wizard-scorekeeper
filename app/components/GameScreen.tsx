@@ -109,6 +109,12 @@ export default function GameScreen({ players, onGameEnd }: GameScreenProps) {
     return currentRound - totalBids;
   };
 
+  const handleQuitGame = () => {
+    if (window.confirm("Are you sure you want to quit the game? This action cannot be undone.")) {
+      onGameEnd();
+    }
+  };
+
   return (
     <div className="min-h-screen">
       <div className="bg-gradient-to-r from-yellow-200 via-pink-200 to-purple-200 p-4 pb-8">
@@ -176,16 +182,24 @@ export default function GameScreen({ players, onGameEnd }: GameScreenProps) {
                 </div>
               ))}
             </div>
-            <button
-              ref={buttonRef}
-              onClick={calculateScores}
-              disabled={!isValid}
-              className={`px-4 py-2 rounded ${
-                isValid ? 'bg-green-500 text-white' : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-              }`}
-            >
-              {currentRound === totalRounds ? 'End Game' : 'Next Round'}
-            </button>
+            <div className="flex space-x-4">
+              <button
+                ref={buttonRef}
+                onClick={calculateScores}
+                disabled={!isValid}
+                className={`px-4 py-2 rounded ${
+                  isValid ? 'bg-green-500 text-white' : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                }`}
+              >
+                {currentRound === totalRounds ? 'End Game' : 'Next Round'}
+              </button>
+              <button
+                onClick={handleQuitGame}
+                className="px-4 py-2 rounded bg-red-500 text-white"
+              >
+                Quit Game
+              </button>
+            </div>
             {!isValid && (
               <p className="text-red-500 mt-2">
                 Please ensure all inputs are valid and the sum of tricks equals {currentRound}.
