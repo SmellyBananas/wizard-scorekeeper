@@ -12,6 +12,7 @@ export default function GameScreen({ players, onGameEnd }: GameScreenProps) {
   const [bids, setBids] = useState<number[]>(new Array(players.length).fill(0));
   const [tricks, setTricks] = useState<number[]>(new Array(players.length).fill(0));
   const [isValid, setIsValid] = useState<boolean>(true);
+  const [sortedPlayers, setSortedPlayers] = useState<string[]>(players);
 
   const buttonRef = useRef<HTMLButtonElement>(null);
 
@@ -33,6 +34,14 @@ export default function GameScreen({ players, onGameEnd }: GameScreenProps) {
       window.removeEventListener('keypress', handleKeyPress);
     };
   }, [isValid]);
+
+  useEffect(() => {
+    const sortedIndexes = scores
+      .map((score, index) => ({ score, index }))
+      .sort((a, b) => b.score - a.score)
+      .map(item => item.index);
+    setSortedPlayers(sortedIndexes.map(index => players[index]));
+  }, [scores, players]);
 
   const validateInputs = () => {
     const bidValid = bids.every(bid => bid >= 0 && bid <= currentRound);
@@ -118,19 +127,22 @@ export default function GameScreen({ players, onGameEnd }: GameScreenProps) {
         <div className="max-w-md mx-auto">
           <div className="bg-white rounded-lg shadow-lg p-6 mb-8 -mt-16">
             <h2 className="text-2xl font-bold mb-4">Leaderboard</h2>
-            {players.map((player, index) => (
-              <div
-                key={index}
-                className={`mb-2 p-3 rounded-full text-center font-bold ${
-                  index === 0 ? 'bg-yellow-400' :
-                  index === 1 ? 'bg-gray-300' :
-                  index === 2 ? 'bg-yellow-700' :
-                  'bg-white border border-gray-300'
-                }`}
-              >
-                {player}: {scores[index]}
-              </div>
-            ))}
+            {sortedPlayers.map((player, index) => {
+              const playerIndex = players.indexOf(player);
+              return (
+                <div
+                  key={playerIndex}
+                  className={`mb-2 p-3 rounded-full text-center font-bold ${
+                    index === 0 ? 'bg-yellow-400' :
+                    index === 1 ? 'bg-gray-300' :
+                    index === 2 ? 'bg-yellow-700' :
+                    'bg-white border border-gray-300'
+                  }`}
+                >
+                  {player}: {scores[playerIndex]}
+                </div>
+              );
+            })}
           </div>
 
           <div className="mb-4">
