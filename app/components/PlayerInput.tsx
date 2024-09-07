@@ -1,4 +1,5 @@
 import { useState, useEffect, KeyboardEvent } from "react";
+import Image from 'next/image';
 
 interface PlayerInputProps {
   onStart: (players: string[]) => void;
@@ -50,7 +51,9 @@ export default function PlayerInput({ onStart }: PlayerInputProps) {
 
   return (
     <div>
-      <h1 className="text-3xl font-bold mb-6 text-center">Wizard Scorekeeper</h1>
+      <div className="flex justify-center mb-6">
+        <Image src="/logo.png" alt="Game Logo" width={200} height={100} />
+      </div>
       <h2 className="text-2xl font-bold mb-4">Enter Player Names (3-6 players)</h2>
       {players.map((player, index) => (
         <input

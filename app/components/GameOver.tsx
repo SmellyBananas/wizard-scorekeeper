@@ -1,4 +1,5 @@
 import { useGameManager } from "../utils/GameManager";
+import Image from 'next/image';
 
 interface GameOverProps {
   players: string[];
@@ -21,7 +22,9 @@ export default function GameOver({ players, onStartOver }: GameOverProps) {
 
   return (
     <div>
-      <h1 className="text-3xl font-bold mb-6 text-center">Wizard Scorekeeper</h1>
+      <div className="flex justify-center mb-6">
+        <Image src="/logo.png" alt="Game Logo" width={200} height={100} />
+      </div>
       <h2 className="text-2xl font-bold mb-4">Game Over</h2>
       <h2 className="text-xl font-bold mb-2">Final Scores:</h2>
       {sortedResults.map((result, index) => (

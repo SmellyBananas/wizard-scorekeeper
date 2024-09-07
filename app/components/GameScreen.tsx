@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useGameManager } from "../utils/GameManager";
+import Image from 'next/image';
 
 interface GameScreenProps {
   players: string[];
@@ -120,11 +121,7 @@ export default function GameScreen({ players, onGameEnd }: GameScreenProps) {
       <div className="bg-gradient-to-r from-yellow-200 via-pink-200 to-purple-200 p-4 pb-8">
         <div className="max-w-md mx-auto">
           <header className="text-center mb-8">
-            <h1 className="text-4xl font-bold mb-2">
-              <span className="text-orange-500 drop-shadow-lg">W</span>
-              <span className="text-orange-400">IZARD WHIZ</span>
-            </h1>
-            <h2 className="text-2xl text-blue-500 font-semibold">Live Scorekeeper</h2>
+            <Image src="/logo.png" alt="Game Logo" width={200} height={100} />
           </header>
         </div>
       </div>
