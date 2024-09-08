@@ -55,6 +55,9 @@ export default function PlayerInput({ onStart }: PlayerInputProps) {
         <Image src="/logo.png" alt="Game Logo" width={200} height={100} />
       </div>
       <h2 className="text-2xl font-bold mb-4">Enter Player Names (3-6 players)</h2>
+      <p className="text-sm text-gray-600 mb-4">
+        The order you enter players will be the dealing order. The first player entered will deal first.
+      </p>
       {players.map((player, index) => (
         <div key={index} className="mb-2">
           <input
