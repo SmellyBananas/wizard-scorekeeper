@@ -121,27 +121,30 @@ export default function GameScreen({ players, onGameEnd }: GameScreenProps) {
   };
 
   return (
-    <div className="min-h-screen">
-      <div className="bg-gradient-to-r from-yellow-200 via-pink-200 to-purple-200 p-4 pb-8">
-        <div className="max-w-md mx-auto flex justify-center items-center h-full">
-          <Image src="/logo.png" alt="Game Logo" width={200} height={100} />
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-gray-900 to-gray-700 text-white">
+      <div className="bg-gray-800 p-8 rounded-lg shadow-lg max-w-4xl w-full text-center relative overflow-hidden">
+        <div className="top-0 left-0 right-0 h-32 bg-gradient-to-b from-gray-200 to-gray-400">
+          <div className="h-full flex items-center justify-center">
+            <Image src="/logo.png" alt="Game Logo" width={200} height={100} className="mx-auto" />
+          </div>
         </div>
-      </div>
 
-      <div className="bg-white p-4">
-        <div className="max-w-md mx-auto">
-          <div className="bg-white rounded-lg shadow-lg p-6 mb-8 -mt-16">
-            <h2 className="text-2xl font-bold mb-4">Leaderboard</h2>
+        <div className="mt-10">
+          <h2 className="text-3xl font-bold mb-4 text-yellow-400">Round {currentRound} of {totalRounds}</h2>
+          <p className="text-lg font-semibold mb-4 text-green-400">Current Dealer: {players[currentDealerIndex]}</p>
+
+          <div className="bg-gray-700 rounded-lg p-4 mb-6">
+            <h3 className="text-2xl font-bold mb-4 text-yellow-400">Leaderboard</h3>
             {sortedPlayers.map((player, index) => {
               const playerIndex = players.indexOf(player);
               return (
                 <div
                   key={playerIndex}
                   className={`mb-2 p-3 rounded-full text-center font-bold ${
-                    index === 0 ? 'bg-yellow-400' :
-                    index === 1 ? 'bg-gray-300' :
-                    index === 2 ? 'bg-yellow-700' :
-                    'bg-white border border-gray-300'
+                    index === 0 ? 'bg-yellow-400 text-gray-800' :
+                    index === 1 ? 'bg-gray-300 text-gray-800' :
+                    index === 2 ? 'bg-yellow-700 text-white' :
+                    'bg-gray-600 text-white'
                   }`}
                 >
                   {player}: {scores[playerIndex]}
@@ -150,14 +153,12 @@ export default function GameScreen({ players, onGameEnd }: GameScreenProps) {
             })}
           </div>
 
-          <div className="mb-4">
-            <h2 className="text-2xl font-bold mb-4">Round {currentRound} of {totalRounds}</h2>
-            <p className="text-lg font-semibold mb-2">Current Dealer: {players[currentDealerIndex]}</p>
-            <div className="mb-4">
-              <h2 className="text-xl font-bold mb-2">Bids</h2>
+          <div className="grid grid-cols-2 gap-4 mb-6">
+            <div>
+              <h3 className="text-xl font-bold mb-2 text-green-400">Bids</h3>
               {players.map((player, index) => (
-                <div key={index} className="mb-2">
-                  <label>{player}: </label>
+                <div key={index} className="mb-2 flex items-center justify-between">
+                  <span>{player}:</span>
                   <NumberSelector
                     value={bids[index]}
                     onChange={(value) => updateBid(index, value)}
@@ -165,15 +166,15 @@ export default function GameScreen({ players, onGameEnd }: GameScreenProps) {
                   />
                 </div>
               ))}
-              <div className="mt-2 font-bold text-blue-600">
+              <div className="mt-2 font-bold text-blue-400">
                 Tricks Remaining: {calculateRemainingTricks()}
               </div>
             </div>
-            <div className="mb-4">
-              <h2 className="text-xl font-bold mb-2">Tricks</h2>
+            <div>
+              <h3 className="text-xl font-bold mb-2 text-green-400">Tricks</h3>
               {players.map((player, index) => (
-                <div key={index} className="mb-2">
-                  <label>{player}: </label>
+                <div key={index} className="mb-2 flex items-center justify-between">
+                  <span>{player}:</span>
                   <NumberSelector
                     value={tricks[index]}
                     onChange={(value) => updateTrick(index, value)}
@@ -182,55 +183,57 @@ export default function GameScreen({ players, onGameEnd }: GameScreenProps) {
                 </div>
               ))}
             </div>
-            <div className="flex space-x-4">
-              <button
-                ref={buttonRef}
-                onClick={calculateScores}
-                disabled={!isValid}
-                className={`px-4 py-2 rounded ${
-                  isValid ? 'bg-green-500 text-white' : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                }`}
-              >
-                {currentRound === totalRounds ? 'End Game' : 'Next Round'}
-              </button>
-              <button
-                onClick={handleQuitGame}
-                className="px-4 py-2 rounded bg-red-500 text-white"
-              >
-                Quit Game
-              </button>
-            </div>
-            {!isValid && (
-              <p className="text-red-500 mt-2">
-                Please ensure all inputs are valid and the sum of tricks equals {currentRound}.
-              </p>
-            )}
-            
-            {/* New table for round results */}
-            <div className="mt-8 overflow-x-auto">
-              <table className="w-full border-collapse">
-                <thead>
-                  <tr>
-                    <th className="border p-2">Round</th>
-                    {players.map((player, index) => (
-                      <th key={index} className="border p-2">{player}</th>
+          </div>
+
+          <div className="flex justify-center space-x-4 mb-6">
+            <button
+              ref={buttonRef}
+              onClick={calculateScores}
+              disabled={!isValid}
+              className={`px-6 py-3 rounded-full font-bold transition duration-300 transform hover:scale-105 ${
+                isValid ? 'bg-green-600 text-white hover:bg-green-700' : 'bg-gray-500 text-gray-300 cursor-not-allowed'
+              }`}
+            >
+              {currentRound === totalRounds ? 'End Game' : 'Next Round'}
+            </button>
+            <button
+              onClick={handleQuitGame}
+              className="px-6 py-3 rounded-full bg-red-600 text-white font-bold hover:bg-red-700 transition duration-300 transform hover:scale-105"
+            >
+              Quit Game
+            </button>
+          </div>
+
+          {!isValid && (
+            <p className="text-red-500 mb-4">
+              Please ensure all inputs are valid and the sum of tricks equals {currentRound}.
+            </p>
+          )}
+
+          <div className="bg-gray-700 rounded-lg p-4 overflow-x-auto">
+            <h3 className="text-xl font-bold mb-2 text-yellow-400">Round Results</h3>
+            <table className="w-full border-collapse">
+              <thead>
+                <tr>
+                  <th className="border border-gray-600 p-2">Round</th>
+                  {players.map((player, index) => (
+                    <th key={index} className="border border-gray-600 p-2">{player}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {roundResults && roundResults.map((result, roundIndex) => (
+                  <tr key={roundIndex}>
+                    <td className="border border-gray-600 p-2">{roundIndex + 1}</td>
+                    {result.points.map((points, playerIndex) => (
+                      <td key={playerIndex} className="border border-gray-600 p-2">
+                        {points} ({result.bids[playerIndex]}/{result.tricks[playerIndex]})
+                      </td>
                     ))}
                   </tr>
-                </thead>
-                <tbody>
-                  {roundResults && roundResults.map((result, roundIndex) => (
-                    <tr key={roundIndex}>
-                      <td className="border p-2">{roundIndex + 1}</td>
-                      {result.points.map((points, playerIndex) => (
-                        <td key={playerIndex} className="border p-2">
-                          {points} ({result.bids[playerIndex]}/{result.tricks[playerIndex]})
-                        </td>
-                      ))}
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
