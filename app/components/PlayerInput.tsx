@@ -56,16 +56,17 @@ export default function PlayerInput({ onStart }: PlayerInputProps) {
       </div>
       <h2 className="text-2xl font-bold mb-4">Enter Player Names (3-6 players)</h2>
       {players.map((player, index) => (
-        <input
-          key={index}
-          type="text"
-          name={`player-${index}`}
-          value={player}
-          onChange={(e) => updatePlayer(index, e.target.value)}
-          onKeyPress={(e) => handleKeyPress(e, index)}
-          className="block w-full mb-2 p-2 border rounded"
-          placeholder={`Player ${index + 1}`}
-        />
+        <div key={index} className="mb-2">
+          <input
+            type="text"
+            name={`player-${index}`}
+            value={player}
+            onChange={(e) => updatePlayer(index, e.target.value)}
+            onKeyPress={(e) => handleKeyPress(e, index)}
+            className="block w-full p-2 border rounded"
+            placeholder={`Player ${index + 1}`}
+          />
+        </div>
       ))}
       {players.length < 6 && (
         <button

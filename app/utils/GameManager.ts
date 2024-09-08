@@ -11,7 +11,8 @@ interface GameState {
   scores: number[];
   currentRound: number;
   roundResults: RoundResult[];
-  totalRounds: number;  // Add this line
+  totalRounds: number;
+  currentDealerIndex: number;
 }
 
 const calculateTotalRounds = (playerCount: number) => Math.floor(60 / playerCount);
@@ -28,6 +29,7 @@ export function useGameManager(initialPlayers: string[]) {
       currentRound: 1,
       roundResults: [],
       totalRounds: calculateTotalRounds(initialPlayers.length),
+      currentDealerIndex: 0,  // Always start with the first player as dealer
     };
   });
 
@@ -52,6 +54,7 @@ export function useGameManager(initialPlayers: string[]) {
       scores: newScores,
       currentRound: prevState.currentRound < prevState.totalRounds ? prevState.currentRound + 1 : prevState.currentRound,
       roundResults: [...prevState.roundResults, newRoundResult],
+      currentDealerIndex: (prevState.currentDealerIndex + 1) % prevState.players.length,
     }));
   }, [gameState]);
 
@@ -62,6 +65,7 @@ export function useGameManager(initialPlayers: string[]) {
       roundResults: [],
       totalRounds: calculateTotalRounds(initialPlayers.length),
       players: initialPlayers,
+      currentDealerIndex: 0,  // Reset to the first player as dealer
     };
     setGameState(initialState);
     localStorage.setItem('wizardGameState', JSON.stringify(initialState));

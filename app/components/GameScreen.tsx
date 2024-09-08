@@ -9,7 +9,7 @@ interface GameScreenProps {
 
 export default function GameScreen({ players, onGameEnd }: GameScreenProps) {
   const { gameState, updateScores, resetGame } = useGameManager(players);
-  const { scores, currentRound, roundResults, totalRounds } = gameState;
+  const { scores, currentRound, roundResults, totalRounds, currentDealerIndex } = gameState;
   const [bids, setBids] = useState<number[]>(new Array(players.length).fill(0));
   const [tricks, setTricks] = useState<number[]>(new Array(players.length).fill(0));
   const [isValid, setIsValid] = useState<boolean>(true);
@@ -152,6 +152,7 @@ export default function GameScreen({ players, onGameEnd }: GameScreenProps) {
 
           <div className="mb-4">
             <h2 className="text-2xl font-bold mb-4">Round {currentRound} of {totalRounds}</h2>
+            <p className="text-lg font-semibold mb-2">Current Dealer: {players[currentDealerIndex]}</p>
             <div className="mb-4">
               <h2 className="text-xl font-bold mb-2">Bids</h2>
               {players.map((player, index) => (
