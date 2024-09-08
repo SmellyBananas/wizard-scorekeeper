@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 interface RoundResult {
   bids: number[];
@@ -35,7 +35,7 @@ export function useGameManager(initialPlayers: string[]) {
     localStorage.setItem('wizardGameState', JSON.stringify(gameState));
   }, [gameState]);
 
-  const updateScores = (bids: number[], tricks: number[]) => {
+  const updateScores = useCallback((bids: number[], tricks: number[]) => {
     const newScores = gameState.scores.map((score, index) => {
       if (bids[index] === tricks[index]) {
         return score + 20 + tricks[index] * 10;
@@ -53,19 +53,19 @@ export function useGameManager(initialPlayers: string[]) {
       currentRound: prevState.currentRound < prevState.totalRounds ? prevState.currentRound + 1 : prevState.currentRound,
       roundResults: [...prevState.roundResults, newRoundResult],
     }));
-  };
+  }, [gameState]);
 
-  const resetGame = () => {
-    localStorage.removeItem('wizardGameState');
-    localStorage.removeItem('wizardPlayers');
-    setGameState({
-      players: initialPlayers,
+  const resetGame = useCallback(() => {
+    const initialState: GameState = {
       scores: new Array(initialPlayers.length).fill(0),
       currentRound: 1,
       roundResults: [],
       totalRounds: calculateTotalRounds(initialPlayers.length),
-    });
-  };
+      players: initialPlayers,
+    };
+    setGameState(initialState);
+    localStorage.setItem('wizardGameState', JSON.stringify(initialState));
+  }, [initialPlayers]);
 
   return {
     gameState,

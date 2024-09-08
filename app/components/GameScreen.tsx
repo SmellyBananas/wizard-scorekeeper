@@ -8,7 +8,7 @@ interface GameScreenProps {
 }
 
 export default function GameScreen({ players, onGameEnd }: GameScreenProps) {
-  const { gameState, updateScores } = useGameManager(players);
+  const { gameState, updateScores, resetGame } = useGameManager(players);
   const { scores, currentRound, roundResults, totalRounds } = gameState;
   const [bids, setBids] = useState<number[]>(new Array(players.length).fill(0));
   const [tricks, setTricks] = useState<number[]>(new Array(players.length).fill(0));
@@ -43,6 +43,10 @@ export default function GameScreen({ players, onGameEnd }: GameScreenProps) {
       .map(item => item.index);
     setSortedPlayers(sortedIndexes.map(index => players[index]));
   }, [scores, players]);
+
+  useEffect(() => {
+    resetGame();
+  }, [players, resetGame]);
 
   const validateInputs = () => {
     const bidValid = bids.every(bid => bid >= 0 && bid <= currentRound);
@@ -215,7 +219,7 @@ export default function GameScreen({ players, onGameEnd }: GameScreenProps) {
                   </tr>
                 </thead>
                 <tbody>
-                  {roundResults.map((result, roundIndex) => (
+                  {roundResults && roundResults.map((result, roundIndex) => (
                     <tr key={roundIndex}>
                       <td className="border p-2">{roundIndex + 1}</td>
                       {result.points.map((points, playerIndex) => (

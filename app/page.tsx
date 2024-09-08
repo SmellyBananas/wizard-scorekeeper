@@ -35,9 +35,18 @@ export default function Home() {
   };
 
   const handleStartOver = () => {
+    localStorage.removeItem('wizardPlayers');
+    localStorage.removeItem('wizardGameState');
     setPlayers([]);
     setScores([]);
     setGameState("input");
+  };
+
+  const handlePlayAgain = () => {
+    // Reset scores but keep the same players
+    setScores(new Array(players.length).fill(0));
+    localStorage.setItem('wizardGameState', JSON.stringify({ scores: new Array(players.length).fill(0) }));
+    setGameState("playing");
   };
 
   return (
@@ -57,6 +66,7 @@ export default function Home() {
             players={players}
             scores={scores}
             onStartOver={handleStartOver}
+            onPlayAgain={handlePlayAgain}
           />
         )}
       </div>

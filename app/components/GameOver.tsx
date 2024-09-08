@@ -4,9 +4,10 @@ import Image from 'next/image';
 interface GameOverProps {
   players: string[];
   onStartOver: () => void;
+  onPlayAgain: () => void; // Add this new prop
 }
 
-export default function GameOver({ players, onStartOver }: GameOverProps) {
+export default function GameOver({ players, onStartOver, onPlayAgain }: GameOverProps) {
   const { gameState, resetGame } = useGameManager(players);
 
   const sortedResults = gameState.players
@@ -18,6 +19,11 @@ export default function GameOver({ players, onStartOver }: GameOverProps) {
       resetGame();
       onStartOver();
     }
+  };
+
+  const handlePlayAgain = () => {
+    resetGame();
+    onPlayAgain();
   };
 
   return (
@@ -33,12 +39,20 @@ export default function GameOver({ players, onStartOver }: GameOverProps) {
         </div>
       ))}
       
-      <button
-        onClick={handleStartOver}
-        className="mt-4 px-4 py-2 rounded bg-blue-500 text-white"
-      >
-        Start Over
-      </button>
+      <div className="flex justify-center space-x-4 mt-4">
+        <button
+          onClick={handlePlayAgain}
+          className="px-4 py-2 rounded bg-green-500 text-white"
+        >
+          Play Again
+        </button>
+        <button
+          onClick={handleStartOver}
+          className="px-4 py-2 rounded bg-blue-500 text-white"
+        >
+          Start Over
+        </button>
+      </div>
     </div>
   );
 }
