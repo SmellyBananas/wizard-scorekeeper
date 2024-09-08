@@ -123,10 +123,8 @@ export default function GameScreen({ players, onGameEnd }: GameScreenProps) {
   return (
     <div className="min-h-screen">
       <div className="bg-gradient-to-r from-yellow-200 via-pink-200 to-purple-200 p-4 pb-8">
-        <div className="max-w-md mx-auto">
-          <header className="text-center mb-8">
-            <Image src="/logo.png" alt="Game Logo" width={200} height={100} />
-          </header>
+        <div className="max-w-md mx-auto flex justify-center items-center h-full">
+          <Image src="/logo.png" alt="Game Logo" width={200} height={100} />
         </div>
       </div>
 
